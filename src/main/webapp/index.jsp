@@ -17,6 +17,9 @@
         <h1 class="h3 mb-3 font-weight-normal">Ingreso al sistema HR</h1>
         <input type="text" name="inputEmail" class="form-control" placeholder="Correo" autofocus="">
         <input type="password" name="inputPassword" class="form-control" placeholder="Password">
+        <% if (request.getParameter("error") != null) { %>
+        <div class="text-danger mb-2">Error credenciales no válidas</div>
+        <% } %>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
     </form>
 </body>
