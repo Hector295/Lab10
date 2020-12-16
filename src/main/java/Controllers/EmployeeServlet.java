@@ -123,7 +123,7 @@ public class EmployeeServlet extends HttpServlet {
 
             case "editar":
                 HttpSession session = request.getSession();
-                int top = session.getAttribute("top");
+                int top =  (int) session.getAttribute("top");
                 if(top==1 || top==3) {
                     if (request.getParameter("id") != null) {
                         String employeeIdString = request.getParameter("id");
