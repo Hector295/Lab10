@@ -26,7 +26,7 @@
             <li class="nav-item <%=currentPage.equals("job") ? "active" : ""%>">
                 <a class="nav-link" href="<%=request.getContextPath()%>/JobServlet">Jobs</a>
             </li>
-            <li class="nav-item <%=currentPage.equals("est") ? "active" : ""%>">
+            <li class="nav-item <%=(currentPage.equals("est") && employeeSession.getJob().getJobTitle().equalsIgnoreCase("President")) ? "active" : ""%>">
                 <a class="nav-link" href="<%=request.getContextPath()%>/EmployeeServlet?action=est">Estadísticas</a>
             </li>
         </ul>
