@@ -3,6 +3,7 @@
 <%@page import="Beans.Employee"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:useBean id="empleado" type="Employee" scope="request" />
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -24,43 +25,43 @@
                         <input type="hidden" name="employee_id" value="<%= empleado.getEmployeeId()%>" />
                         <div class="form-group">
                             <label for="first_name">First Name</label>
-                            <input type="text" class="form-control form-control-sm" name="first_name" value="<%= empleado.getFirstName() == null ? "" : empleado.getFirstName()%>">
+                            <input type="text" class="form-control form-control-sm" id="first_name" name="first_name" value="<%= empleado.getFirstName() == null ? "" : empleado.getFirstName()%>">
                         </div>
                         <div class="form-group">
                             <label for="last_name">Last Name</label>
-                            <input type="text" class="form-control form-control-sm" name="last_name" value="<%= empleado.getLastName() == null ? "" : empleado.getLastName()%>">
+                            <input type="text" class="form-control form-control-sm" id="last_name" name="last_name" value="<%= empleado.getLastName() == null ? "" : empleado.getLastName()%>">
                         </div>
                         <div class="form-group">
                             <label for="email">Email</label>
-                            <input type="text" class="form-control form-control-sm" name="email" value="<%= empleado.getEmail() == null ? "" : empleado.getEmail()%>">
+                            <input type="text" class="form-control form-control-sm" id="email" name="email" value="<%= empleado.getEmail() == null ? "" : empleado.getEmail()%>">
                         </div>
                         <div class="form-group">
                             <label for="phone">Phone number</label>
-                            <input type="text" class="form-control form-control-sm" name="phone" value="<%= empleado.getPhoneNumber() == null ? "" : empleado.getPhoneNumber()%>">
+                            <input type="text" class="form-control form-control-sm" id="phone" name="phone" value="<%= empleado.getPhoneNumber() == null ? "" : empleado.getPhoneNumber()%>">
                         </div>
                         <div class="form-group">
                             <label for="phone">Hire date</label>
-                            <input type="text" class="form-control form-control-sm" name="hire_date" value="<%= empleado.getHireDate() == null ? "" : empleado.getHireDate()%>">
+                            <input type="text" class="form-control form-control-sm" id="hire_date" name="hire_date" value="<%= empleado.getHireDate() == null ? "" : empleado.getHireDate()%>">
                         </div>
                         <div class="form-group">
-                            <label for="phone">Job ID</label>
-                            <input type="text" class="form-control" name="job_id" value="<%= empleado.getJob().getJobId() == null ? "" : empleado.getJob().getJobId()%>">
+                            <label for="job_id">Job ID</label>
+                            <input type="text" class="form-control" id="job_id" name="job_id" value="<%= empleado.getJob().getJobId() == null ? "" : empleado.getJob().getJobId()%>">
                         </div>
                         <div class="form-group">
                             <label for="salary">Salary</label>
-                            <input type="text" class="form-control form-control-sm" name="salary" value="<%= empleado.getSalary().equals("0.0") ? "" : empleado.getSalary()%>">
+                            <input type="text" class="form-control form-control-sm" id="salary" name="salary" value="<%= empleado.getSalary().equals("0.0") ? "" : empleado.getSalary()%>">
                         </div>
                         <div class="form-group">
                             <label for="commission">Commision PCT</label>
-                            <input type="text" class="form-control form-control-sm" name="commission" value="<%= empleado.getCommissionPct() == null ? "" : empleado.getCommissionPct()%>">
+                            <input type="text" class="form-control form-control-sm" id="commission" name="commission" value="<%= empleado.getCommissionPct() == null ? "" : empleado.getCommissionPct()%>">
                         </div>
                         <div class="form-group">
                             <label for="manager_id">Manager ID</label>
-                            <input type="text" class="form-control form-control-sm" name="manager_id" value="<%= empleado.getManager().getEmployeeId() == 0 ? "" : empleado.getManager().getEmployeeId()%>">
+                            <input type="text" class="form-control form-control-sm" id="manager_id" name="manager_id" value="<%= empleado.getManager().getEmployeeId() == 0 ? "" : empleado.getManager().getEmployeeId()%>">
                         </div>
                         <div class="form-group">
                             <label for="department_id">Department ID</label>
-                            <input type="text" class="form-control form-control-sm" name="department_id" value="<%= empleado.getDepartment().getDepartmentId() == 0 ? "" : empleado.getDepartment().getDepartmentId()%>">
+                            <input type="text" class="form-control form-control-sm" id="department_id" name="department_id" value="<%= empleado.getDepartment().getDepartmentId() == 0 ? "" : empleado.getDepartment().getDepartmentId()%>">
                         </div>                        
                         <a href="<%= request.getContextPath()%>/EmployeeServlet" class="btn btn-danger">Cancelar</a>
                         <input type="submit" value="Guardar" class="btn btn-primary" />
