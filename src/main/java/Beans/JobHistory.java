@@ -7,6 +7,24 @@ public class JobHistory {
     private String endDate;
     private Job job;
     private Department department;
+    private  String NombreDepartamento;
+    private String jobTitle;
+
+    public String getJobTitle() {
+        return jobTitle;
+    }
+
+    public void setJobTitle(String jobTitle) {
+        this.jobTitle = jobTitle;
+    }
+
+    public String getNombreDepartamento() {
+        return NombreDepartamento;
+    }
+
+    public void setNombreDepartamento(String nombreDepartamento) {
+        NombreDepartamento = nombreDepartamento;
+    }
 
     /**
      * @return the employeeId

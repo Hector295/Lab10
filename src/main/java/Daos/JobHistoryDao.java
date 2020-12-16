@@ -21,9 +21,30 @@ public class JobHistoryDao extends DaoBase {
 
         ArrayList<JobHistory> lista = new ArrayList<>();
 
-         /*
-                Inserte su código aquí
-                 */
+        try {
+            String sql ="SELECT j.employee_id, DATE_FORMAT(j.start_date,'%Y-%m-%d'),\n" +
+                    "DATE_FORMAT(j.end_date,'%Y-%m-%d'),jo.job_title,d.department_name from job_history j,jobs jo\n" +
+                    ", departments d where j.department_id=d.department_id and j.employee_id=? and jo.job_id=j.job_id;";
+            try (Connection conn = this.getConection();
+                 PreparedStatement pstmt = conn.prepareStatement(sql);) {
+                pstmt.setInt(1, employeeId);
+
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    while (rs.next()) {
+                       JobHistory jobHistory = new JobHistory();
+                        jobHistory.setEmployeeId(rs.getInt(1));
+                        jobHistory.setStartDate(rs.getString(2));
+                        jobHistory.setEndDate(rs.getString(3));
+                        jobHistory.setJobTitle(rs.getString(4));
+                        jobHistory.setNombreDepartamento(rs.getString(5));
+                        lista.add(jobHistory);
+                    }
+                }
+
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(JobDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         return lista;
     }
