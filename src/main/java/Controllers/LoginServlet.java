@@ -37,15 +37,15 @@ public class LoginServlet extends HttpServlet {
                     HttpSession session = request.getSession();
                     session.setAttribute("employeeSession", employee);
                     if (employee.getJob().getMaxSalary()>15000){
-                        session.setAttribute("rol",1);
+                        session.setAttribute("rol","Top 1");
                     } else if (employee.getJob().getMaxSalary()<=15000 &&
                             employee.getJob().getMaxSalary()>8500){
-                        session.setAttribute("rol",2);
+                        session.setAttribute("rol","Top 2");
                     } else if (employee.getJob().getMaxSalary()<=8500 &&
                             employee.getJob().getMaxSalary()>5000){
-                        session.setAttribute("rol",3);
+                        session.setAttribute("rol","Top 3");
                     }else if(employee.getJob().getMaxSalary()<=5000){
-                        session.setAttribute("rol",4);
+                        session.setAttribute("rol","Top 4");
                     }
                     response.sendRedirect(request.getContextPath() + "/EmployeeServlet");
                 } else {
