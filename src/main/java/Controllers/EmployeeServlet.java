@@ -108,7 +108,7 @@ public class EmployeeServlet extends HttpServlet {
         HttpSession session = request.getSession();
         String rol = (String) session.getAttribute("rol");
         RequestDispatcher view;
-        Employee employee;
+        Employee employee = (Employee) session.getAttribute("employeeSession");
         EmployeeDao employeeDao = new EmployeeDao();
         JobDao jobDao = new JobDao();
 
@@ -180,9 +180,14 @@ public class EmployeeServlet extends HttpServlet {
                 }
                 break;
             case "est":
-                     /*
-                Inserte su código aquí
-                 */
+                String job= employee.getJob().getJobTitle();
+                if(job.equalsIgnoreCase("President")) {
+                    DepartmentDao departmentDao=new DepartmentDao();
+                    request.setAttribute("listaEmpRegion",employeeDao.listaEmpleadosPorRegion());
+                    request.setAttribute("listaSalario",departmentDao.listaSalarioPorDepartamento());
+                    view = request.getRequestDispatcher("employees/estadisticas.jsp");
+                    view.forward(request, response);
+                }
                 break;
         }
     }
