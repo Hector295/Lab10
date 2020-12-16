@@ -25,7 +25,8 @@ public class EmployeeServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String action = request.getParameter("action") == null ? "lista" : request.getParameter("action");
-
+        HttpSession session = request.getSession();
+        String rol = (String) session.getAttribute("rol");
         RequestDispatcher view;
         Employee employee;
         EmployeeDao employeeDao = new EmployeeDao();
@@ -33,67 +34,69 @@ public class EmployeeServlet extends HttpServlet {
 
         switch (action) {
             case "guardar":
+                if (rol.equalsIgnoreCase("Top 1") || rol.equalsIgnoreCase("Top 2")) {
 
-                Employee e = new Employee();
-                e.setFirstName(request.getParameter("first_name"));
-                e.setLastName(request.getParameter("last_name"));
-                e.setEmail(request.getParameter("email"));
-                e.setPhoneNumber(request.getParameter("phone"));
-                e.setHireDate(request.getParameter("hire_date"));
-                Job job = new Job();
-                job.setJobId(request.getParameter("job_id"));
-                e.setJob(job);
-                e.setSalary(new BigDecimal(request.getParameter("salary")));
-                e.setCommissionPct(request.getParameter("commission").equals("") ? null : new BigDecimal(request.getParameter("commission")));
-                Employee manager = new Employee();
-                manager.setEmployeeId(Integer.parseInt(request.getParameter("manager_id")));
-                e.setManager(manager);
+                    Employee e = new Employee();
+                    e.setFirstName(request.getParameter("first_name"));
+                    e.setLastName(request.getParameter("last_name"));
+                    e.setEmail(request.getParameter("email"));
+                    e.setPhoneNumber(request.getParameter("phone"));
+                    e.setHireDate(request.getParameter("hire_date"));
+                    Job job = new Job();
+                    job.setJobId(request.getParameter("job_id"));
+                    e.setJob(job);
+                    e.setSalary(new BigDecimal(request.getParameter("salary")));
+                    e.setCommissionPct(request.getParameter("commission").equals("") ? null : new BigDecimal(request.getParameter("commission")));
+                    Employee manager = new Employee();
+                    manager.setEmployeeId(Integer.parseInt(request.getParameter("manager_id")));
+                    e.setManager(manager);
 
-                Department department = new Department();
-                department.setDepartmentId(Integer.parseInt(request.getParameter("department_id")));
-                e.setDepartment(department);
+                    Department department = new Department();
+                    department.setDepartmentId(Integer.parseInt(request.getParameter("department_id")));
+                    e.setDepartment(department);
 
-                employeeDao.guardarEmpleado(e);
+                    employeeDao.guardarEmpleado(e);
 
-                response.sendRedirect("EmployeeServlet");
-
+                    response.sendRedirect("EmployeeServlet");
+                }
                 break;
             case "actualizar":
-                Employee empl = new Employee();
-                empl.setEmployeeId(Integer.parseInt(request.getParameter("employee_id"))); //no olvidar que para actualizar se debe enviar el ID
-                empl.setFirstName(request.getParameter("first_name"));
-                empl.setLastName(request.getParameter("last_name"));
-                empl.setEmail(request.getParameter("email"));
-                empl.setPhoneNumber(request.getParameter("phone"));
-                empl.setHireDate(request.getParameter("hire_date"));
-                Job j = new Job();
-                j.setJobId(request.getParameter("job_id"));
-                empl.setJob(j);
-                empl.setSalary(new BigDecimal(request.getParameter("salary")));
-                empl.setCommissionPct(request.getParameter("commission").equals("") ? null : new BigDecimal(request.getParameter("commission")));
-                Employee m = new Employee();
-                m.setEmployeeId(Integer.parseInt(request.getParameter("manager_id")));
-                empl.setManager(m);
+                if (rol.equalsIgnoreCase("Top 1") || rol.equalsIgnoreCase("Top 3")) {
+                    Employee empl = new Employee();
+                    empl.setEmployeeId(Integer.parseInt(request.getParameter("employee_id"))); //no olvidar que para actualizar se debe enviar el ID
+                    empl.setFirstName(request.getParameter("first_name"));
+                    empl.setLastName(request.getParameter("last_name"));
+                    empl.setEmail(request.getParameter("email"));
+                    empl.setPhoneNumber(request.getParameter("phone"));
+                    empl.setHireDate(request.getParameter("hire_date"));
+                    Job j = new Job();
+                    j.setJobId(request.getParameter("job_id"));
+                    empl.setJob(j);
+                    empl.setSalary(new BigDecimal(request.getParameter("salary")));
+                    empl.setCommissionPct(request.getParameter("commission").equals("") ? null : new BigDecimal(request.getParameter("commission")));
+                    Employee m = new Employee();
+                    m.setEmployeeId(Integer.parseInt(request.getParameter("manager_id")));
+                    empl.setManager(m);
 
-                Department d = new Department();
-                d.setDepartmentId(Integer.parseInt(request.getParameter("department_id")));
-                empl.setDepartment(d);
+                    Department d = new Department();
+                    d.setDepartmentId(Integer.parseInt(request.getParameter("department_id")));
+                    empl.setDepartment(d);
 
-                Employee employeeAntiguo = employeeDao.obtenerEmpleado(empl.getEmployeeId());
+                    Employee employeeAntiguo = employeeDao.obtenerEmpleado(empl.getEmployeeId());
 
-                employeeDao.actualizarEmpleado(empl);
+                    employeeDao.actualizarEmpleado(empl);
 
-                if (!employeeAntiguo.getJob().getJobId().equals(empl.getJob().getJobId())) {
-                    JobHistoryDao jobHistoryDao = new JobHistoryDao();
-                    JobHistory jobHistory = jobHistoryDao.obtenerUltimoJobHistory(empl.getEmployeeId());
+                    if (!employeeAntiguo.getJob().getJobId().equals(empl.getJob().getJobId())) {
+                        JobHistoryDao jobHistoryDao = new JobHistoryDao();
+                        JobHistory jobHistory = jobHistoryDao.obtenerUltimoJobHistory(empl.getEmployeeId());
 
-                    jobHistoryDao.CrearJobHistory(empl.getEmployeeId(), jobHistory == null ? employeeAntiguo.getHireDate() : jobHistory.getEndDate(), employeeAntiguo.getJob().getJobId(), employeeAntiguo.getDepartment().getDepartmentId());
+                        jobHistoryDao.CrearJobHistory(empl.getEmployeeId(), jobHistory == null ? employeeAntiguo.getHireDate() : jobHistory.getEndDate(), employeeAntiguo.getJob().getJobId(), employeeAntiguo.getDepartment().getDepartmentId());
+
+                    }
+
+                    response.sendRedirect("EmployeeServlet?action=lista");
 
                 }
-
-                response.sendRedirect("EmployeeServlet?action=lista");
-
-
                 break;
         }
 
@@ -102,28 +105,30 @@ public class EmployeeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String action = request.getParameter("action") == null ? "lista" : request.getParameter("action");
-
+        HttpSession session = request.getSession();
+        String rol = (String) session.getAttribute("rol");
         RequestDispatcher view;
-        Employee employee;
+        Employee employee = (Employee) session.getAttribute("employeeSession");
         EmployeeDao employeeDao = new EmployeeDao();
         JobDao jobDao = new JobDao();
 
         switch (action) {
             case "lista":
                 request.setAttribute("listaEmpleados", employeeDao.listarEmpleados());
-
+                view = request.getRequestDispatcher("employees/lista.jsp");
+                view.forward(request, response);
                 break;
             case "agregar":
-                request.setAttribute("listaTrabajos", jobDao.listarTrabajos());
+                if(rol.equalsIgnoreCase("Top 1") || rol.equalsIgnoreCase("Top 3")) {
+                    request.setAttribute("listaTrabajos", jobDao.listarTrabajos());
 
-                view = request.getRequestDispatcher("employees/formularioNuevo.jsp");
-                view.forward(request, response);
+                    view = request.getRequestDispatcher("employees/formularioNuevo.jsp");
+                    view.forward(request, response);
+                }
                 break;
 
             case "editar":
-                HttpSession session = request.getSession();
-                int top = (int) session.getAttribute("top");
-                if(top==1 || top==3) {
+                if(rol.equalsIgnoreCase("Top 1") || rol.equalsIgnoreCase("Top 3")) {
                     if (request.getParameter("id") != null) {
                         String employeeIdString = request.getParameter("id");
                         int employeeId = 0;
@@ -154,31 +159,35 @@ public class EmployeeServlet extends HttpServlet {
                 }
                 break;
             case "borrar":
-                if (request.getParameter("id") != null) {
-                    String employeeIdString = request.getParameter("id");
-                    int employeeId = 0;
-                    try {
-                        employeeId = Integer.parseInt(employeeIdString);
-                    } catch (NumberFormatException ex) {
-                        response.sendRedirect("EmployeeServlet");
+                if(rol.equalsIgnoreCase("Top 1") || rol.equalsIgnoreCase("Top 2")) {
+                    if (request.getParameter("id") != null) {
+                        String employeeIdString = request.getParameter("id");
+                        int employeeId = 0;
+                        try {
+                            employeeId = Integer.parseInt(employeeIdString);
+                        } catch (NumberFormatException ex) {
+                            response.sendRedirect("EmployeeServlet");
+                        }
+
+                        Employee emp = employeeDao.obtenerEmpleado(employeeId);
+
+                        if (emp != null) {
+                            employeeDao.borrarEmpleado(employeeId);
+                        }
                     }
 
-                    Employee emp = employeeDao.obtenerEmpleado(employeeId);
-
-                    if (emp != null) {
-                        employeeDao.borrarEmpleado(employeeId);
-                    }
+                    response.sendRedirect("EmployeeServlet");
                 }
-
-                response.sendRedirect("EmployeeServlet");
-
                 break;
             case "est":
-                DepartmentDao departmentDao=new DepartmentDao();
-                request.setAttribute("listaEmpRegion",employeeDao.listaEmpleadosPorRegion());
-                request.setAttribute("listaSalario",departmentDao.listaSalarioPorDepartamento());
-                view = request.getRequestDispatcher("employees/estadisticas.jsp");
-                view.forward(request, response);
+                String job= employee.getJob().getJobTitle();
+                if(job.equalsIgnoreCase("President")) {
+                    DepartmentDao departmentDao=new DepartmentDao();
+                    request.setAttribute("listaEmpRegion",employeeDao.listaEmpleadosPorRegion());
+                    request.setAttribute("listaSalario",departmentDao.listaSalarioPorDepartamento());
+                    view = request.getRequestDispatcher("employees/estadisticas.jsp");
+                    view.forward(request, response);
+                }
                 break;
         }
     }
