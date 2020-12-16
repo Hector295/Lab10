@@ -228,10 +228,25 @@ public class EmployeeDao extends DaoBase {
     public ArrayList<EmpleadosPorRegionDto> listaEmpleadosPorRegion() {
 
         ArrayList<EmpleadosPorRegionDto> lista = new ArrayList<>();
-
-        /*
-                Inserte su código aquí
-                 */
+        String sql = "select r.region_name, count(c.country_id) " +
+                "from employees e\n" +
+                "inner join departments d on (e.department_id = d.department_id)\n" +
+                "inner join locations l on (l.location_id = d.location_id)\n" +
+                "inner join countries c on (c.country_id = l.country_id)\n" +
+                "inner join regions r on (c.region_id = r.region_id)\n" +
+                "group by r.region_id order by region_name";
+        try (Connection connection = getConection();
+             Statement statement = connection.createStatement();
+             ResultSet rs = statement.executeQuery(sql);) {
+            while (rs.next()) {
+                EmpleadosPorRegionDto e = new EmpleadosPorRegionDto();
+                e.setNombreRegion(rs.getString(1));
+                e.setCantidadEmpleados(rs.getInt(2));
+                lista.add(e);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
         return lista;
     }
 }

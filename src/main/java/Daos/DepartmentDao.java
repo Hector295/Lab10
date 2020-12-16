@@ -120,10 +120,26 @@ public class DepartmentDao extends DaoBase {
     public ArrayList<SalarioPorDepartamentoDto> listaSalarioPorDepartamento() {
 
         ArrayList<SalarioPorDepartamentoDto> lista = new ArrayList<>();
+        String sql = "select department_name, min(salary), max(salary), truncate (avg (salary),2)"
+                + "from departments d "
+                + "inner join employees e on e.department_id = d.department_id "
+                + "group by d.department_name order by d.department_name";
 
-        /*
-                Inserte su código aquí
-                 */
+        try (Connection conn = this.getConection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                SalarioPorDepartamentoDto dto = new SalarioPorDepartamentoDto();
+                dto.setNombreDepartamento(rs.getString(1));
+                dto.setSalarioMinimo(rs.getBigDecimal(2));
+                dto.setSalarioMaximo(rs.getBigDecimal(3));
+                dto.setSalarioPromedio(rs.getBigDecimal(4));
+                lista.add(dto);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
 
         return lista;
     }
@@ -132,9 +148,6 @@ public class DepartmentDao extends DaoBase {
 
         boolean retorno = false;
 
-        /*
-                Inserte su código aquí
-                 */
 
         return retorno;
     }

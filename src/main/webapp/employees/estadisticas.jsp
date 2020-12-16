@@ -25,10 +25,7 @@
             <% for (EmpleadosPorRegionDto emp : listaEmpRegion) {%>
             <div class="row">
                 <div class="col">
-                    <%--                        --%>
-                    <%--                        Inserte su código aquí--%>
-                    <%--                        --%>
-
+                   <p > <%=emp.getNombreRegion()%> : <%=" "+ emp.getCantidadEmpleados()%></p>
                 </div>
             </div>
             <% } %>
@@ -50,9 +47,11 @@
                         for (SalarioPorDepartamentoDto dto : listaSalario) {
                     %>
                     <tr>
-<%--                        --%>
-<%--                        Inserte su código aquí--%>
-<%--                        --%>
+                        <td><%=i%></td>
+                        <td><%=dto.getNombreDepartamento()%></td>
+                        <td><%=dto.getSalarioMinimo()%></td>
+                        <td><%=dto.getSalarioPromedio()%></td>
+                        <td><%=dto.getSalarioMaximo()%></td>
                     </tr>
                     <% i++;
                         }%>

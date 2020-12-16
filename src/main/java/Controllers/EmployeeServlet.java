@@ -111,8 +111,7 @@ public class EmployeeServlet extends HttpServlet {
         switch (action) {
             case "lista":
                 request.setAttribute("listaEmpleados", employeeDao.listarEmpleados());
-                view = request.getRequestDispatcher("employees/lista.jsp");
-                view.forward(request, response);
+
                 break;
             case "agregar":
                 request.setAttribute("listaTrabajos", jobDao.listarTrabajos());
@@ -123,7 +122,7 @@ public class EmployeeServlet extends HttpServlet {
 
             case "editar":
                 HttpSession session = request.getSession();
-                int top = session.getAttribute("top");
+                int top = (int) session.getAttribute("top");
                 if(top==1 || top==3) {
                     if (request.getParameter("id") != null) {
                         String employeeIdString = request.getParameter("id");
@@ -175,9 +174,11 @@ public class EmployeeServlet extends HttpServlet {
 
                 break;
             case "est":
-                     /*
-                Inserte su código aquí
-                 */
+                DepartmentDao departmentDao=new DepartmentDao();
+                request.setAttribute("listaEmpRegion",employeeDao.listaEmpleadosPorRegion());
+                request.setAttribute("listaSalario",departmentDao.listaSalarioPorDepartamento());
+                view = request.getRequestDispatcher("employees/estadisticas.jsp");
+                view.forward(request, response);
                 break;
         }
     }
